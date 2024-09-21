@@ -1,0 +1,68 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storage-name": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 20,
+            "metadata": {
+                "description": "Provide the Storage Account Name:"
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "storage-account-default-name": "[if(not(empty(parameters('storage-name'))), parameters('storage-name'), 'default-sa')]"
+    },
+    "resources": [
+        //Automatic navigation
+        {
+            "name": "[toLower(concat(variables('storage-account-default-name'), copyIndex()))]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2023-01-01",
+            "tags": {
+                "displayName": "Using Snipped to creation"
+            },
+            "location": "[resourceGroup().location]",
+            "condition": "[not(empty(parameters('storage-name')))]",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "Premium_LRS",
+                "tier": "Premium"
+            },
+            "resources": [
+                {
+                    "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+                    "name": "[toLower(concat(parameters('storage-name'), copyIndex(), '/default/input'))]",
+                    "apiVersion": "2023-01-01",
+                    "dependsOn": [
+                        "[concat(parameters('storage-name'), copyIndex())]"
+                    ],
+                    "location": "[resourceGroup().location]" // Specify the location of the storage account
+                }
+            ],
+            "copy": {
+                "name": "storageaccountclone",
+                "count": 3
+            }
+        },
+        
+        //Manual Creation
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2023-01-01",
+            "name": "manualsa01",
+            "location": "West India",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "tags": {
+                "displayName": "Manual Coding Creation"
+            }
+        }
+    ],
+    "outputs": {}
+}
