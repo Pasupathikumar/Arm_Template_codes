@@ -1,5 +1,0 @@
-[
-{"vmName":"pasupathi01", "adminUsername":"Pasupathikumar", "adminPassword":"Pasupathikumar@819"},
-{"vmName":"pasupathi02", "adminUsername":"Pasupathikumar", "adminPassword":"Pasupathikumar@819"},
-{"vmName":"pasupathi03", "adminUsername":"Pasupathikumar", "adminPassword":"Pasupathikumar@819"}
-]

@@ -1,3 +1,0 @@
-{
-  "storageaccountname": "[parameters(json('azure-template.parameters.json').storage-name)]"
-}
